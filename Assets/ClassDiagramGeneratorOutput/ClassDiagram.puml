@@ -1,0 +1,99 @@
+@startuml
+class AiCenter {
+    - aiCenterData : AiCenterData
+    - _sizeIndicatorBase : Vector3
+}
+class AiCenterData {
+    + SizeMult : float
+    + EndSize : float
+    + GDPR : bool
+}
+class AnimationController {
+    - _animator : Animator
+    - _currentClip : AnimationClip
+}
+class Enemy {
+    - _attacked : bool
+}
+class EnemyFactory {
+    - _promptDataList : List<PromptData>
+}
+class EnemyMoveToAI {
+    - spriteRenderer : SpriteRenderer
+    - aiCore : AiCenter
+    - movementType : int
+    - randomOffset : float
+}
+class EnemySpawner {
+    - _enemyFactory : EnemyFactory
+    - _enemyInterval : float
+    - _intervalDecreaseRate : float
+    - _minInterval : float
+}
+class GDPRUI {
+}
+class IndicatorGetter {
+    - _indicatorDictionary : Dictionary<IndicatorTypes,Texture2D>
+}
+class PlayerController {
+    - playerRigidbody : Rigidbody2D
+    - playerInput : PlayerInput
+    - doubleTapAction : InputAction
+    - tapAction : InputAction
+    - tapPositionAction : InputAction
+}
+class PlayerAttack {
+    - _lastAttacked : float
+    - _animationController : AnimationController
+}
+class PlayerSprite {
+    - _animationController : AnimationController
+}
+class Prompt {
+    - _promptData : PromptData
+    - _animationController : AnimationController
+    - _expandCancellationTokenSource : CancellationTokenSource
+    - _shrinkCancellationTokenSource : CancellationTokenSource
+}
+class PromptData {
+    + PromptHeader : string
+    + IndicatorType : IndicatorTypes
+    - _currentCheck : PromptCheck
+}
+class PromptCheck {
+    + Disapproved : bool
+    + NotPublicInfo : bool
+    + CopyrightedData : bool
+    + SubjectNotInformed : bool
+}
+class ScoreUI {
+    + Instance : ScoreUI
+    + companyValue : float
+    + valueText : TextMeshProUGUI
+    - audioSource : AudioSource
+}
+class TextWriter {
+    - HTML_ALPHA : string
+}
+MonoBehaviour <|-- AiCenter
+MonoBehaviour <|-- AnimationController
+MonoBehaviour <|-- Enemy
+MonoBehaviour <|-- EnemyFactory
+MonoBehaviour <|-- EnemyMoveToAI
+MonoBehaviour <|-- EnemySpawner
+MonoBehaviour <|-- GDPRUI
+MonoBehaviour <|-- PlayerController
+MonoBehaviour <|-- PlayerAttack
+MonoBehaviour <|-- PlayerSprite
+MonoBehaviour <|-- Prompt
+ScriptableObject <|-- PromptData
+MonoBehaviour <|-- ScoreUI
+AiCenter --> AiCenterData : aiCenterData
+EnemyMoveToAI --> AiCenter : aiCore
+EnemySpawner --> EnemyFactory : _enemyFactory
+PlayerAttack --> AnimationController : _animationController
+PlayerSprite --> AnimationController : _animationController
+Prompt --> PromptData : _promptData
+Prompt --> AnimationController : _animationController
+PromptData --> PromptCheck : _currentCheck
+@enduml

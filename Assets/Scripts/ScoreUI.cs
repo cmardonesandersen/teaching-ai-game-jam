@@ -9,6 +9,7 @@ public class ScoreUI : MonoBehaviour
     public static ScoreUI Instance;
     public float companyValue = 0;
     public TextMeshProUGUI valueText;
+    private AudioSource audioSource;
 
     [SerializeField] private AudioClip positiveValueSound;
     [SerializeField] private AudioClip negativeValueSound;
@@ -16,6 +17,7 @@ public class ScoreUI : MonoBehaviour
 
     private void Awake()
     {
+        audioSource = GetComponent<AudioSource>();
         if (ScoreUI.Instance == null)
         {
             Instance = this;
@@ -34,6 +36,7 @@ public class ScoreUI : MonoBehaviour
 
     void UpdateUI()
     {
+     
         if (valueText != null) 
         { 
         valueText.text = "Company Value = " + companyValue.ToString("F2");
@@ -43,8 +46,11 @@ public class ScoreUI : MonoBehaviour
 
     public void UpdateScore(float change)
     {
+        if (change > 0 && positiveValueSound != null)audioSource.PlayOneShot(positiveValueSound);
 
-        companyValue += change;
+        else if( change  < 0 && negativeValueSound != null) audioSource.PlayOneShot(negativeValueSound);
+
+            companyValue += change;
         UpdateUI();
     }
 }
